@@ -1,6 +1,6 @@
 {
   "name": "@jwalab/nats-runner",
-  "version": "1.0.13",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
