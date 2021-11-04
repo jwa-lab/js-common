@@ -1,17 +1,5 @@
-import {
-    connect,
-    NatsConnection,
-    Subscription,
-    JSONCodec,
-    Codec,
-    JetStreamClient,
-    JetStreamSubscription
-} from "nats";
-import {
-    ContainerBuilder,
-    JsFileLoader,
-    Parameter
-} from "node-dependency-injection";
+import { connect, NatsConnection, Subscription, JSONCodec, Codec, JetStreamClient, JetStreamSubscription } from "nats";
+import { ContainerBuilder, JsFileLoader, Parameter } from "node-dependency-injection";
 import { Logger } from "@jwalab/logger";
 import { JetStreamConsumer } from "./Consumers";
 
@@ -82,10 +70,7 @@ export class NatsRunner {
     private initContainer() {
         Object.keys(this.config).forEach((configName) => {
             this.config[configName] &&
-                this.container.setParameter(
-                    `config.${configName}`,
-                    this.config[configName] as Parameter
-                );
+                this.container.setParameter(`config.${configName}`, this.config[configName] as Parameter);
         });
 
         this.container.setParameter("cwd", this.cwd);
@@ -114,15 +99,11 @@ export class NatsRunner {
         this.container.register("jetStreamClient");
         this.container.set("jetStreamClient", this.jetStreamClient);
 
-        this.logger.debug(
-            `NatsRunner connected to NATS ${this.config.NATS_URL} and JetStream client initialized`
-        );
+        this.logger.debug(`NatsRunner connected to NATS ${this.config.NATS_URL} and JetStream client initialized`);
     }
 
     private async startPlugins() {
-        const ids = Array.from(
-            this.container.findTaggedServiceIds("runner.plugin").keys()
-        );
+        const ids = Array.from(this.container.findTaggedServiceIds("runner.plugin").keys());
 
         await Promise.all(
             ids.map(async (id) => {
@@ -134,9 +115,7 @@ export class NatsRunner {
     }
 
     private async registerNatsHandlers() {
-        const ids = Array.from(
-            this.container.findTaggedServiceIds("nats.handler").keys()
-        );
+        const ids = Array.from(this.container.findTaggedServiceIds("nats.handler").keys());
 
         ids.forEach((id) => {
             const handler = this.container.get(id);
@@ -146,17 +125,13 @@ export class NatsRunner {
             } else if (handler instanceof AirlockHandler) {
                 this.registerAirlockHandler(handler);
             } else {
-                throw new Error(
-                    "Nats Handler must extend type Handler or AirlockHandler"
-                );
+                throw new Error("Nats Handler must extend type Handler or AirlockHandler");
             }
         });
     }
 
     private async registerJetStreamConsumers() {
-        const ids = Array.from(
-            this.container.findTaggedServiceIds("nats.consumer").keys()
-        );
+        const ids = Array.from(this.container.findTaggedServiceIds("nats.consumer").keys());
 
         ids.forEach((id) => {
             const consumer = this.container.get(id);
@@ -164,9 +139,7 @@ export class NatsRunner {
             if (consumer instanceof JetStreamConsumer) {
                 this.registerJetStreamConsumer(consumer);
             } else {
-                throw new Error(
-                    "Nats Consumer must extend type JetStreamConsumer"
-                );
+                throw new Error("Nats Consumer must extend type JetStreamConsumer");
             }
         });
     }
@@ -183,10 +156,7 @@ export class NatsRunner {
         this.logger.debug(`Registering private handler for ${subject}`);
         const subscriptionOptions = handler.getSubscriptionOptions();
 
-        const subscription = this.natsConnection.subscribe(
-            subject,
-            subscriptionOptions
-        );
+        const subscription = this.natsConnection.subscribe(subject, subscriptionOptions);
 
         this.handlePrivateMessage(subscription, handler);
     }
@@ -196,23 +166,15 @@ export class NatsRunner {
         this.logger.debug(`Registering airlock handler for ${subject}`);
         const subscriptionOptions = handler.getSubscriptionOptions();
 
-        const subscription = this.natsConnection.subscribe(
-            subject,
-            subscriptionOptions
-        );
+        const subscription = this.natsConnection.subscribe(subject, subscriptionOptions);
 
         this.handleAirlockMessage(subscription, handler);
     }
 
-    async handleAirlockMessage(
-        subscription: Subscription,
-        handler: AirlockHandler
-    ): Promise<void> {
+    async handleAirlockMessage(subscription: Subscription, handler: AirlockHandler): Promise<void> {
         for await (const message of subscription) {
             try {
-                const response = await handler.handle(
-                    new AirlockMessage(message)
-                );
+                const response = await handler.handle(new AirlockMessage(message));
 
                 message.respond(this.jsonCodec.encode(response));
             } catch (err) {
@@ -226,10 +188,7 @@ export class NatsRunner {
         }
     }
 
-    async handlePrivateMessage(
-        subscription: Subscription,
-        handler: PrivateHandler
-    ): Promise<void> {
+    async handlePrivateMessage(subscription: Subscription, handler: PrivateHandler): Promise<void> {
         for await (const message of subscription) {
             try {
                 const response = await handler.handle(new Message(message));
@@ -253,18 +212,12 @@ export class NatsRunner {
 
         const consumerOptions = consumer.getConsumerOptions();
 
-        const subscription = await this.jetStreamClient.subscribe(
-            subject,
-            consumerOptions
-        );
+        const subscription = await this.jetStreamClient.subscribe(subject, consumerOptions);
 
         this.handleJetStreamMessage(subscription, consumer);
     }
 
-    async handleJetStreamMessage(
-        subscription: JetStreamSubscription,
-        consumer: JetStreamConsumer
-    ): Promise<void> {
+    async handleJetStreamMessage(subscription: JetStreamSubscription, consumer: JetStreamConsumer): Promise<void> {
         for await (const message of subscription) {
             try {
                 await consumer.handle(new JetStreamMessage(message));

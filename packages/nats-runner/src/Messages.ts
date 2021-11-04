@@ -35,9 +35,7 @@ export class Message {
         this.subject = subject;
         this.reply = reply;
         this.sid = sid;
-        this.data = String(data)
-            ? JSONCodec<Record<string, unknown>>().decode(data)
-            : null;
+        this.data = String(data) ? JSONCodec<Record<string, unknown>>().decode(data) : null;
         this.headers = headers ? natsHeadersToObject(headers) : {};
     }
 }

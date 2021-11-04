@@ -18,19 +18,13 @@ export class GetDocsHandler extends PrivateHandler {
         };
     }
 
-    constructor(
-        private cwd: string,
-        private SERVICE_NAME: string,
-        private logger: Logger
-    ) {
+    constructor(private cwd: string, private SERVICE_NAME: string, private logger: Logger) {
         super();
 
         let jsonDocs;
 
         try {
-            const docs = String(
-                fs.readFileSync(`${this.cwd}/openapi-docs.json`)
-            );
+            const docs = String(fs.readFileSync(`${this.cwd}/openapi-docs.json`));
             jsonDocs = JSON.parse(docs);
         } catch (err) {
             this.logger.warning("Unable to load openapi docs.");

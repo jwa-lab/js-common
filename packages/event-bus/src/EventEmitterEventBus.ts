@@ -12,10 +12,7 @@ export class EventEmitterEventBus implements EventBus {
         this.eventEmitter.emit(event.name, event);
     }
 
-    subscribe<T extends EventBusEvent>(
-        eventName: T["name"],
-        callback: (event: T) => void
-    ): () => void {
+    subscribe<T extends EventBusEvent>(eventName: T["name"], callback: (event: T) => void): () => void {
         this.eventEmitter.on(eventName, callback);
 
         return () => this.eventEmitter.off(eventName, callback);
