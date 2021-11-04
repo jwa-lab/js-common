@@ -16,8 +16,8 @@
     },
     "dependencies": {
         "jwt-decode": "^3.1.2",
-        "@jwalab/logger": "latest",
-        "@jwalab/open-api": "latest",
+        "@jwalab/logger": "^0.0.1",
+        "@jwalab/open-api": "^0.0.1",
         "node-dependency-injection": "^2.7.1"
     },
     "peerDependencies": {
