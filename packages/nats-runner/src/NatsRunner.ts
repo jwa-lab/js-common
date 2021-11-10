@@ -1,5 +1,6 @@
 import { connect, NatsConnection, Subscription, JSONCodec, Codec, JetStreamClient, JetStreamSubscription } from "nats";
 import { ContainerBuilder, JsFileLoader, Parameter } from "node-dependency-injection";
+import {JWAError} from "@jwalab/errors";
 import { Logger } from "@jwalab/logger";
 import { JetStreamConsumer } from "./Consumers";
 
@@ -181,7 +182,10 @@ export class NatsRunner {
                 this.logger.error((err as Error).message);
                 message.respond(
                     this.jsonCodec.encode({
-                        error: (err as Error).message
+                        error:
+                            err instanceof JWAError
+                                ? JSON.stringify({ ...err, origin: undefined })
+                                : (err as Error).message
                     })
                 );
             }
@@ -198,7 +202,10 @@ export class NatsRunner {
                 this.logger.error((err as Error).message);
                 message.respond(
                     this.jsonCodec.encode({
-                        error: (err as Error).message
+                        error:
+                            err instanceof JWAError
+                                ? JSON.stringify({ ...err, origin: undefined })
+                                : (err as Error).message
                     })
                 );
             }
