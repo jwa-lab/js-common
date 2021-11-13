@@ -1,8 +1,7 @@
 module.exports = {
     services: {
         GetDocsHandler: {
-            class: "@jwalab/open-api",
-            main: "GetDocsHandler",
+            class: "openApi",
             tags: [{ name: "nats.handler" }],
             arguments: ["%cwd%", "%config.SERVICE_NAME%", "@logger"]
         },

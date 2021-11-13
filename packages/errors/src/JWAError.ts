@@ -24,12 +24,10 @@ export class JWAError extends Error {
             throw new Error("Invalid error code.");
         }
 
-        if (origin) {
-            if (!(origin instanceof Error)) {
-                throw new Error(
-                    `Invalid origin error, got '${typeof origin}' but the expected type is 'Error'`
-                );
-            }
+        if (origin && !(origin instanceof Error)) {
+            throw new Error(
+                `Invalid origin error, got '${typeof origin}' but the expected type is 'Error'`
+            );
         }
 
         this.httpCode = httpCode;
