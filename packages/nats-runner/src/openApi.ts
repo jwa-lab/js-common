@@ -3,7 +3,7 @@ import { OpenAPIV3 } from "openapi-types";
 import { SubscriptionOptions } from "nats";
 
 import { Logger } from "@jwalab/logger";
-import { PrivateHandler } from "@jwalab/nats-runner";
+import {PrivateHandler} from "./Handlers";
 
 type OpenAPIDocs = Pick<OpenAPIV3.Document, "paths" | "components" | "tags">;
 
