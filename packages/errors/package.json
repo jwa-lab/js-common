@@ -1,9 +1,13 @@
 {
   "name": "@jwalab/errors",
   "version": "0.0.1",
-  "description": "",
+  "description": "Contains common re-usable errors",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=14",
+    "npm": ">=7.21"
+  },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.4",
@@ -25,11 +29,11 @@
     "type": "git",
     "url": "git+https://github.com/jwa-lab/js-common.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["JWA", "error"],
+  "author": "JWA Lab",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jwa-lab/js-common/issues"
   },
-  "homepage": "https://github.com/jwa-lab/js-common#readme"
+  "homepage": "https://github.com/jwa-lab/js-common/tree/main/packages/errors#readme"
 }
