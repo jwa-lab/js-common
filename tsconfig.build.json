@@ -1,0 +1,21 @@
+{
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.stub.ts",
+    "node_modules",
+    "dist"
+  ],
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@jwalab/*": ["./packages/*/"]
+    }
+  }
+}

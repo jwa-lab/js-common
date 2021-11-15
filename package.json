@@ -1,0 +1,35 @@
+{
+  "name": "js-common",
+  "private": true,
+  "description": "Common JS and TS tools for building microservices in the JWA Platform",
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "engines": {
+    "node": ">=14",
+    "npm": ">=7.21"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwa-lab/js-common.git"
+  },
+  "keywords": [
+    "JWA",
+    "LAB",
+    "js-common",
+    "Nats"
+  ],
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "husky": "^7.0.2",
+    "pretty-quick": "^3.1.1"
+  },
+  "author": "JWA Lab",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jwa-lab/js-common/issues"
+  },
+  "homepage": "https://github.com/jwa-lab/js-common#readme"
+}
