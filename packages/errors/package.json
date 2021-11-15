@@ -1,6 +1,6 @@
 {
   "name": "@jwalab/errors",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Contains common re-usable errors",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

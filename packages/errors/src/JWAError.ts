@@ -5,19 +5,15 @@ export class JWAError extends Error {
 
     constructor(
         httpCode: number,
-        name: string,
         message: string,
         errorCode: string,
         origin?: Error
     ) {
         super();
+        this.name = this.constructor.name;
 
         if (!httpCode || typeof httpCode !== "number") {
             throw new Error("Invalid HTTP Code");
-        }
-
-        if (!name || name === "" || typeof name !== "string") {
-            throw new Error("Invalid error name.");
         }
 
         if (!errorCode || errorCode === "" || typeof errorCode !== "string") {
@@ -31,7 +27,6 @@ export class JWAError extends Error {
         }
 
         this.httpCode = httpCode;
-        this.name = name;
         this.message = message;
         this.errorCode = errorCode;
         this.origin = origin;
