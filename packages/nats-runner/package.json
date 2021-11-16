@@ -1,6 +1,6 @@
 {
     "name": "@jwalab/nats-runner",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -15,9 +15,9 @@
         "typescript": "^4.4"
     },
     "dependencies": {
+        "@jwalab/errors": "0.0.2",
+        "@jwalab/logger": "0.0.1",
         "jwt-decode": "^3.1.2",
-        "@jwalab/logger": "^0.0.1",
-        "@jwalab/errors": "^0.0.1",
         "node-dependency-injection": "^2.7.1"
     },
     "peerDependencies": {
@@ -27,7 +27,7 @@
         "prettier": "npx prettier --write .",
         "lint": "eslint ./src/ --ext .ts --max-warnings 0",
         "clean": "rm -rf ./dist/*",
-        "dev": "npx tsc -w",
+        "dev": "npx tsc -p tsconfig.pkg.json -w",
         "build": "npx tsc -p tsconfig.pkg.json"
     },
     "repository": {
