@@ -1,0 +1,49 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+function publish-package() {
+    if [ -z "$@" ]
+    then
+          echo "A package name is required as parameter."
+          exit 1
+    fi
+
+    npm run clean -w @jwalab/$@
+    npm run build -w @jwalab/$@
+    npm publish -w @jwalab/$@ --access public
+}
+
+function new-package() {
+    if [ -z "$@" ]
+    then
+          echo "A package name is required as parameter."
+          exit 1
+    fi
+
+    echo "Preparing new package" $@
+    mkdir ./packages/$@
+    mkdir .tmp_package
+    git clone git@github.com:jwa-lab/bootstrap-package.git ./.tmp_package/$@
+    rm -rf ./.tmp_package/$@/.git
+    mv ./.tmp_package/$@/* ./packages/$@
+    mv ./.tmp_package/$@/.[!.]* ./packages/$@
+    rm -rf ./.tmp_package
+    pushd ./packages/$@
+    mkdir src
+    touch src/index.ts
+    npm install --no-save --no-package-lock dot-json
+    echo "Preparing the package.json ..."
+    npx dot-json package.json name "@jwalab/$@"
+    npx dot-json package.json homepage "https://github.com/jwa-lab/js-common/tree/main/packages/$@"
+    npx dot-json package.json bugs.url "https://github.com/jwa-lab/js-common/issues"
+    npx dot-json package.json repository.url "git+https://github.com/jwa-lab/js-common.git"
+    echo "Done."
+    echo "Cleaning up ..."
+    rm -rf node_modules package-lock.json
+    echo "Done."
+    popd
+    echo "All good for new package" $@
+}
+
+"$@"
