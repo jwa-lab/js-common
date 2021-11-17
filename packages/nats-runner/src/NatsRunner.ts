@@ -1,15 +1,15 @@
-import { connect, NatsConnection, Subscription, JSONCodec, Codec, JetStreamClient, JetStreamSubscription } from "nats";
+import { connect, NatsConnection, Subscription, JSONCodec, Codec, JetStreamClient } from "nats";
 import { ContainerBuilder, JsFileLoader, Parameter } from "node-dependency-injection";
-import {JWAError} from "@jwalab/errors";
+import { JWAError } from "@jwalab/errors";
 import { Logger } from "@jwalab/logger";
-import { JetStreamConsumer } from "./Consumers";
 
+import { JetStreamPullConsumerHandler, JetStreamPushConsumerHandler } from "./ConsumerHandlers";
 import { AirlockHandler, PrivateHandler } from "./Handlers";
 import { AirlockMessage, JetStreamMessage, Message } from "./Messages";
 
 export * from "./Messages";
 export * from "./Handlers";
-export * from "./Consumers";
+export * from "./ConsumerHandlers";
 export * from "./Plugin";
 export * from "./tokenParser";
 
@@ -27,8 +27,8 @@ export interface NatsRunnerConfig {
 }
 
 export class NatsRunner {
-    private readonly cwd;
-    private readonly container;
+    private readonly cwd: string;
+    private readonly container: ContainerBuilder;
     private readonly jsonCodec: Codec<unknown>;
 
     private natsConnection!: NatsConnection;
@@ -80,7 +80,7 @@ export class NatsRunner {
         loader.load(`${__dirname}/di`);
         loader.load(`${this.cwd}/di`);
 
-        this.logger = this.container.get<Logger>("logger");
+        this.logger = this.container.get("logger");
 
         this.container.logger = { warn: (msg) => this.logger.warning(msg) };
 
@@ -137,10 +137,10 @@ export class NatsRunner {
         ids.forEach((id) => {
             const consumer = this.container.get(id);
 
-            if (consumer instanceof JetStreamConsumer) {
+            if (consumer instanceof JetStreamPushConsumerHandler || consumer instanceof JetStreamPullConsumerHandler) {
                 this.registerJetStreamConsumer(consumer);
             } else {
-                throw new Error("Nats Consumer must extend type JetStreamConsumer");
+                throw new Error("Nats Consumer must be of type JetStreamPushConsumer or JetStreamPullConsumer");
             }
         });
     }
@@ -212,24 +212,26 @@ export class NatsRunner {
         }
     }
 
-    private async registerJetStreamConsumer(consumer: JetStreamConsumer) {
-        const subject = consumer.subject;
+    private async registerJetStreamConsumer(consumer: JetStreamPushConsumerHandler | JetStreamPullConsumerHandler) {
+        await consumer.subscribe();
 
-        this.logger.debug(`Registering consumer for ${subject}`);
+        this.handleJetStreamMessage(consumer);
 
-        const consumerOptions = consumer.getConsumerOptions();
-
-        const subscription = await this.jetStreamClient.subscribe(subject, consumerOptions);
-
-        this.handleJetStreamMessage(subscription, consumer);
+        consumer.onReady();
     }
 
-    async handleJetStreamMessage(subscription: JetStreamSubscription, consumer: JetStreamConsumer): Promise<void> {
+    async handleJetStreamMessage(consumer: JetStreamPullConsumerHandler | JetStreamPushConsumerHandler): Promise<void> {
+        const subscription = consumer.getSubscription();
+
         for await (const message of subscription) {
             try {
                 await consumer.handle(new JetStreamMessage(message));
             } catch (err) {
-                this.logger.error((err as Error).message);
+                this.logger.error(
+                    `Error handling JetStream message with sequence id (${message.seq}). ${JSON.stringify(
+                        err
+                    )}. Message won't be redelivered`
+                );
 
                 // if the handler wants the message to be redelivered,
                 // it needs to catch the error itself and implement the necessary retries.
