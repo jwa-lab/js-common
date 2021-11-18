@@ -3,12 +3,17 @@ export class JWAError extends Error {
     readonly errorCode: string;
     readonly origin?: Error;
 
-    constructor(httpCode: number, message: string, errorCode: string, origin?: Error) {
+    constructor(
+        httpCode: number,
+        message: string,
+        errorCode: string,
+        origin?: Error
+    ) {
         super();
         this.name = this.constructor.name;
 
         if (!httpCode || typeof httpCode !== "number") {
-            throw new Error("Invalid HTTP Code");
+            throw new Error("Invalid HTTP code.");
         }
 
         if (!errorCode || errorCode === "" || typeof errorCode !== "string") {
@@ -16,7 +21,9 @@ export class JWAError extends Error {
         }
 
         if (origin && !(origin instanceof Error)) {
-            throw new Error(`Invalid origin error, got '${typeof origin}' but the expected type is 'Error'`);
+            throw new Error(
+                `Invalid origin error, got '${typeof origin}' but the expected type is 'Error'.`
+            );
         }
 
         this.httpCode = httpCode;
