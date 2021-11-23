@@ -23,7 +23,7 @@
         "clean": "rm -rf ./dist/*",
         "dev": "npx tsc -w",
         "tests:int": "jest int",
-        "tests:unit": "jest unit",
+        "tests:unit": "jest unit --passWithNoTests",
         "tests": "jest",
         "build": "npx tsc -p tsconfig.pkg.json"
     },
