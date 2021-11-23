@@ -8,7 +8,7 @@ jobs:
             tag: "16.6"
         steps:
             - checkout
-            - run: npm ci
+            - run: npm install
             - run: npm run lint --ws
     test:
         executor:
@@ -16,7 +16,7 @@ jobs:
             tag: "16.6"
         steps:
             - checkout
-            - run: npm ci
+            - run: npm install
             - run: npm run all:tests:unit
 
 workflows:
