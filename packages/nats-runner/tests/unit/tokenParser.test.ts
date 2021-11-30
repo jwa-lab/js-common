@@ -13,7 +13,7 @@ describe("Given tokenParser", () => {
 
     describe("When called with an invalid JWT", () => {
         it("Should throw an invalid JWT error.", () => {
-            expect(() => parseJwtToNats(MALFORMED_USER_JWT)).toThrow("Invalid token specified: Cannot read property 'replace' of undefined");            
+            expect(() => parseJwtToNats(MALFORMED_USER_JWT)).toThrow("INVALID_JWT: Invalid token specified: Cannot read property 'replace' of undefined");
         })
     });
 
