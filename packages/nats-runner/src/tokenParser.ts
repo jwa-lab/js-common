@@ -19,7 +19,7 @@ export function parseJwtToNats(jwt: string): MsgHdrs {
     try {
         decoded = jwtDecode<AirlockJWT>(cleanJwt);
     } catch (error) {
-        throw new Error(`INVALID_JWT: ${error.message}`);    
+        throw new Error(`INVALID_JWT: ${(error as Error).message}`);    
     }
 
     const parsedJwt = Object.create(null);
