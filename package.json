@@ -3,7 +3,10 @@
   "private": true,
   "description": "Common JS and TS tools for building microservices in the JWA Platform",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "npm run build -ws",
+    "all:tests:unit": "npm run tests:unit -ws",
+    "all:tests:int": "npm run tests:int -ws"
   },
   "engines": {
     "node": ">=14",

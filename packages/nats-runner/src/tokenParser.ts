@@ -13,8 +13,15 @@ export function parseJwtToNats(jwt: string): MsgHdrs {
         throw new Error("INVALID_JWT");
     }
 
+    let decoded;
     const cleanJwt = jwt.replace(/Bearer /g, "");
-    const decoded = jwtDecode<AirlockJWT>(cleanJwt);
+
+    try {
+        decoded = jwtDecode<AirlockJWT>(cleanJwt);
+    } catch (error) {
+        throw new Error(`INVALID_JWT: ${(error as Error).message}`);    
+    }
+
     const parsedJwt = Object.create(null);
 
     parsedJwt["studio_id"] = decoded?.cid || "";
