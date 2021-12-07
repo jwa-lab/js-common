@@ -9,7 +9,7 @@ module.exports = {
         winstonLogger: {
             class: "@jwalab/logger",
             main: "makeWinstonLogger",
-            arguments: ["%config.LOGGING_FORMAT%", "%config.SERVICE_NAME%"]
+            arguments: ["%config.LOGGING_FORMAT%", "%env(LOGGING_LEVEL)%", "%env(NEW_RELIC_ENABLED)%"]
         },
         logger: "@winstonLogger"
     }

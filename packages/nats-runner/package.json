@@ -1,6 +1,6 @@
 {
     "name": "@jwalab/nats-runner",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     },
     "dependencies": {
         "@jwalab/errors": "0.0.2",
-        "@jwalab/logger": "0.0.1",
+        "@jwalab/logger": "0.0.2",
         "jwt-decode": "^3.1.2",
         "node-dependency-injection": "^2.7.1"
     },
