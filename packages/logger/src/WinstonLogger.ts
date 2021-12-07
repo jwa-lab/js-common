@@ -2,11 +2,9 @@ import * as winston from "winston";
 import { Logger } from "./Logger";
 
 export class WinstonLogger implements Logger {
-    serviceName: string;
     logger: winston.Logger;
 
-    constructor(serviceName: string, logger: winston.Logger) {
-        this.serviceName = serviceName;
+    constructor(logger: winston.Logger) {
         this.logger = logger;
     }
 
@@ -43,13 +41,6 @@ export class WinstonLogger implements Logger {
     }
 
     private log(level: string, message: string) {
-        this.logger.log({
-            level,
-            logInfos: {
-                service: this.serviceName,
-                date: new Date()
-            },
-            message
-        });
+        this.logger.log(level, message);
     }
 }
