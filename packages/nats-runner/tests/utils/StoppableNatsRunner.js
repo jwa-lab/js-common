@@ -1,6 +1,6 @@
 import { NatsRunner } from "../../dist/NatsRunner";
 
-export class TestNatsRunner extends NatsRunner {
+export class StoppableNatsRunner extends NatsRunner {
     constructor(cwd) {
         super(cwd);
     }
